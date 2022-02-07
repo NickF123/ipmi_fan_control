@@ -3,11 +3,11 @@ import time
 import syslog
 from simple_pid import PID
 
-
+# USE AT YOUR OWN RISK
 # PID fan control for motherboard with IPMI only (and Linux, tested with ubuntu server 20.04)
-# for motherboards other than ASRockRack E3C246D4U will need modification for location of fan headers
-# uses ipmi fan header mappings for a  with HDD regulating fans connected to REAR_FAN_2 and FRONT_FAN_2
-# uses simple-pid see here: https://github.com/m-lundberg/simple-pid
+# for motherboards other than ASRockRack E3C246D4U will NEED modification for location of fan headers
+# uses ipmi fan header mappings for a with HDD regulating fans connected to REAR_FAN_2 and FRONT_FAN_2
+# required module simple-pid see here: https://github.com/m-lundberg/simple-pid
 # also requires smart-tools (smartctl) and ipmitool
 
 
@@ -50,8 +50,6 @@ def print_fan_settings():
     del fan_settings_list[0]
     del fan_settings_list[7]
 
-    # print("Fan settings: ")
-    # print(fan_settings_list)
     syslog.syslog("fancontrol settings: " + str(fan_settings_list) + " temp: " + str(getMaxTemp()))
 
 
@@ -60,9 +58,9 @@ def main():
     MAX_HD_TEMP = 35
     SAMPLE_TIME = 60 * 5  # 300 seconds or 5 minutes
 
-    pid = PID(-1, -0.1, -0.05, setpoint=MAX_HD_TEMP)  # 35 C HD temperature, negative tu
+    pid = PID(-1, -0.1, -0.05, setpoint=MAX_HD_TEMP)  # 35 C HD temperature
     pid.sample_time = SAMPLE_TIME
-    pid.output_limits = (4, 100)
+    pid.output_limits = (4, 100) #Asrock uses 0x04 to 0x64 steps to regulate, SUPERMICRO may use 0x04 to 0xFF
 
     # enable PID temperature regulation using max hd temp and simple_pid
     # pid object will return values to keep max hdd temp around MAX_HD_TEMP
