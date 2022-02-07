@@ -34,7 +34,9 @@ def getMaxTemp():
 def set_fan_speed(fanspeed):
     # control fan temps
     # ipmitool raw 0x3a 0x01 0x00 0x00 REAR_FAN1 REAR_FAN2 FRONT_FAN1 FRONT_FAN2 0x00 0x00
-
+    # mapping for asrock E3C246D4U with cooling fans on REAR_FAN2, FRONT_FAN2
+    
+    #add dual zone later 
     rear_fan_2 = fanspeed
     front_fan_2 = fanspeed
     subprocess.check_output(f"ipmitool raw 0x3a 0x01 0x00 0x00 0x12 {fanspeed} 0x20 {fanspeed} 0x00 0x00",
