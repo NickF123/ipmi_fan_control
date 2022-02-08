@@ -16,7 +16,7 @@ SAMPLE_TIME = 60 * 5  # 300 seconds or 5 minute sample time
 DRIVE_LIST = ['sda', 'sdb', 'sdc', 'sdd', 'sde']  # drives for which hdd temp will be probed at interval SAMPLE_TIME
 
 
-def getMaxTemp():
+def get_max_temp():
     hdd_temp = []
 
     # getting temp for each drive in drives list then parsing with grep to get the temp line and then awk to get value field
@@ -42,7 +42,7 @@ def set_fan_speed(fanspeed):
 
 
 def print_fan_settings(settings, temp):
-    syslog.syslog("fancontrol setting: " + str(settings) + " temp: " + str(temp)
+    syslog.syslog("fancontrol setting: " + str(settings) + " temp: " + str(temp))
 
 
 def main():
@@ -54,10 +54,10 @@ def main():
     # enable PID temperature regulation using max hd temp and simple_pid
     # pid object will return values to keep max hdd temp around MAX_HD_TEMP
     while True:
-        max_drive temperature = getMaxTemp()
-        control = pid(max_drive temperature)  # feeds current measured hdd max temp to the pid object
+        max_drive_temperature = get_max_temp()
+        control = pid(max_drive_temperature)  # feeds current measured hdd max temp to the pid object
         set_fan_speed(control)  # then use the control value returned to set new fan speeds
-        print_fan_settings(control, max_drive temperature)
+        print_fan_settings(control, max_drive_temperature)
         time.sleep(SAMPLE_TIME)
 
 
