@@ -36,12 +36,13 @@ def set_fan_speed(fanspeed):
     # add dual zone later
     #rear_fan_2 = fanspeed
     #front_fan_2 = fanspeed
+    fanspeed = int(fanspeed)
     subprocess.check_output(f"ipmitool raw 0x3a 0x01 0x00 0x00 0x12 {fanspeed} 0x20 {fanspeed} 0x00 0x00",
                             shell=True)
 
 
-def print_fan_settings(settings):
-    syslog.syslog("fancontrol setting: " + str(settings) + " temp: " + str(getMaxTemp()))
+def print_fan_settings(settings, temp):
+    syslog.syslog("fancontrol setting: " + str(settings) + " temp: " + str(temp)
 
 
 def main():
@@ -53,9 +54,10 @@ def main():
     # enable PID temperature regulation using max hd temp and simple_pid
     # pid object will return values to keep max hdd temp around MAX_HD_TEMP
     while True:
-        control = pid(getMaxTemp())  # feeds current measured hdd max temp to the pid object
-        set_fan_speed(int(control))  # then use the control value returned to set new fan speeds
-        print_fan_settings(control)
+        max_drive temperature = getMaxTemp()
+        control = pid(max_drive temperature)  # feeds current measured hdd max temp to the pid object
+        set_fan_speed(control)  # then use the control value returned to set new fan speeds
+        print_fan_settings(control, max_drive temperature)
         time.sleep(SAMPLE_TIME)
 
 
